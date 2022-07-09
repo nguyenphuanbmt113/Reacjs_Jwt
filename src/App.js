@@ -3,6 +3,7 @@ import "./App.scss";
 import Nav from "./components/navigation/Nav";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./components/Login/Login";
+import Register from "./components/register/register";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 function App() {
@@ -16,6 +17,9 @@ function App() {
           <Route path="/about">about</Route>
           <Route path="/login">
             <Login></Login>
+          </Route>
+          <Route path="/register">
+            <Register></Register>
           </Route>
           <Route path="/" exact>
             <img
