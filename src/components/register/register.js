@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import { useHistory } from "react-router-dom";
 // import { useHistory } from "react-router-dom";
 const Register = () => {
@@ -6,7 +7,11 @@ const Register = () => {
   const handleLogin = () => {
     history.push("/login");
   };
-
+  useEffect(() => {
+    axios.get("https://reqres.in/api/users?page=2").then((data) => {
+      console.log(">>>>>>>check data: ", data);
+    });
+  }, []);
   return (
     <div className="login-container">
       <div className="container">
@@ -22,26 +27,31 @@ const Register = () => {
               type="text"
               className="form-control"
               placeholder="Email address"
+              name="email"
             />
             <input
               type="text"
               className="form-control"
               placeholder="phone number"
+              name="phone"
             />
             <input
               type="text"
               className="form-control"
               placeholder="User name"
+              name="username"
             />
             <input
               type="password"
               className="form-control"
               placeholder="Password"
+              name="password"
             />
             <input
               type="password"
               className="form-control"
               placeholder="re-type Password"
+              name="retypePassword"
             />
             <span className="text-center">
               <a
