@@ -8,29 +8,45 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repassword, setRePassword] = useState("");
+  const defaulValid = {
+    isValidEmail: true,
+    isValidPhone: true,
+    isValidUsername: true,
+    isValidPassword: true,
+    isValidRePassword: true,
+  };
+  const [objCheckValid, setObjCheckValid] = useState(defaulValid);
   const isValidInputs = () => {
+    setObjCheckValid(defaulValid);
     if (!email) {
+      setObjCheckValid({ ...objCheckValid, isValidEmail: false });
       toast.error("email is requied");
+
       return false;
     }
     let regx = /\S+@\S+\.\S+/;
     if (!regx.test(email)) {
+      setObjCheckValid({ ...objCheckValid, isValidEmail: false });
       toast.error("please an valid email");
       return false;
     }
     if (!phone) {
+      setObjCheckValid({ ...objCheckValid, isValidPhone: false });
       toast.error("phone is requied");
       return false;
     }
     if (!username) {
+      setObjCheckValid({ ...objCheckValid, isValidUsername: false });
       toast.error("username is requied");
       return false;
     }
     if (!password) {
+      setObjCheckValid({ ...objCheckValid, isValidPassword: false });
       toast.error("username is requied");
       return false;
     }
     if (password !== repassword) {
+      setObjCheckValid({ ...objCheckValid, isValidRePassword: false });
       toast.error("your password is no the same");
       return false;
     }
@@ -38,20 +54,31 @@ const Register = () => {
   };
   const handleRegister = () => {
     //sau khi nhan register i get data->check validate
-    toast("ez backend");
     //check validinput
-    isValidInputs();
-    let userData = { email, phone, username, password, repassword };
-    console.log(">>>check uesrdata: ", userData);
+    let check = isValidInputs();
+    if (check === true) {
+      axios.post("http://localhost:8070/api/v1/register", {
+        email,
+        phone,
+        username,
+        password,
+      });
+    }
   };
   let history = useHistory();
   const handleLogin = () => {
     history.push("/login");
   };
   useEffect(() => {
-    axios.get("http://localhost:8070/api").then((data) => {
-      console.log(">>>>>>>check data: ", data);
-    });
+    // axios.post("http://localhost:8070/api/v1/test-api").then((data) => {
+    //   console.log(">>>>>>>check data: ", data);
+    // });
+    // axios.post("http://localhost:8070/api/v1/register", {
+    //   email,
+    //   phone,
+    //   username,
+    //   password,
+    // });
   }, []);
   return (
     <div className="login-container">
@@ -66,7 +93,11 @@ const Register = () => {
           <div className=" content-right shadow-sm col-12 px-3 col-sm-5  d-flex flex-column gap-3">
             <input
               type="text"
-              className="form-control"
+              className={
+                objCheckValid.isValidEmail
+                  ? "form-control"
+                  : "form-control is-invalid"
+              }
               placeholder="Email address"
               name="email"
               onChange={(e) => setEmail(e.target.value)}
@@ -74,7 +105,11 @@ const Register = () => {
             />
             <input
               type="text"
-              className="form-control"
+              className={
+                objCheckValid.isValidPhone
+                  ? "form-control"
+                  : "form-control is-invalid"
+              }
               placeholder="phone number"
               name="phone"
               onChange={(e) => setPhone(e.target.value)}
@@ -82,7 +117,11 @@ const Register = () => {
             />
             <input
               type="text"
-              className="form-control"
+              className={
+                objCheckValid.isValidUsername
+                  ? "form-control"
+                  : "form-control is-invalid"
+              }
               placeholder="User name"
               name="username"
               onChange={(e) => setUsername(e.target.value)}
@@ -90,7 +129,11 @@ const Register = () => {
             />
             <input
               type="password"
-              className="form-control"
+              className={
+                objCheckValid.isValidPassword
+                  ? "form-control"
+                  : "form-control is-invalid"
+              }
               placeholder="Password"
               name="password"
               onChange={(e) => setPassword(e.target.value)}
@@ -98,7 +141,11 @@ const Register = () => {
             />
             <input
               type="password"
-              className="form-control"
+              className={
+                objCheckValid.isValidRePassword
+                  ? "form-control"
+                  : "form-control is-invalid"
+              }
               placeholder="re-type Password"
               name="retypePassword"
               onChange={(e) => setRePassword(e.target.value)}
