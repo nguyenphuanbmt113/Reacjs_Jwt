@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import { registerNewUser } from "../services/useServices";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -52,17 +53,17 @@ const Register = () => {
     }
     return true;
   };
-  const handleRegister = () => {
-    //sau khi nhan register i get data->check validate
-    //check validinput
-    let check = isValidInputs();
+  const handleRegister = async () => {
+    let check = isValidInputs(); //check lan 1
     if (check === true) {
-      axios.post("http://localhost:8070/api/v1/register", {
-        email,
-        phone,
-        username,
-        password,
-      });
+      let response = await registerNewUser(email, phone, username, password); //gui lan server
+      let serverData = response.data;
+      if (+serverData.EC === 0) {
+        toast.success(serverData.EM);
+        history.push("/login");
+      } else {
+        toast.error(serverData.EM);
+      }
     }
   };
   let history = useHistory();
